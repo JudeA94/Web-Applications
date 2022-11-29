@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require "sinatra/reloader"
+require 'sinatra/reloader'
 
 class Application < Sinatra::Base
   configure :development do
@@ -12,7 +12,10 @@ class Application < Sinatra::Base
 
   post '/hello' do
     @name = params[:name]
-
-    return erb(:hello)
+    if @name.match?(/^[a-zA-Z\s]+$/)
+      return erb(:hello)
+    else
+      redirect('/')
+    end
   end
 end
