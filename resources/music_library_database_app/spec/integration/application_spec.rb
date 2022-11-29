@@ -82,8 +82,12 @@ describe Application do
     it 'returns 200 OK' do
       # Assuming the post with id 1 exists.
       response = post('/albums?id=13&title=Reputation&release_year=2017&artist_id=3')
-
       expect(response.status).to eq(200)
+      expect(response.body).to include '<h1>New album created</h1>'
+      expect(response.body).to include '<p>Title: Reputation</p>'
+      expect(response.body).to include '<p>Release year: 2017</p>'
+      expect(response.body).to include '<p>Artist id: 3</p>'
+      expect(response.body).to include '<a href="/albums">View all albums</a>'
     end
 
     it 'outputs newly created album' do
@@ -92,12 +96,61 @@ describe Application do
       expect(response.body).to include 'Title: Reputation'
       expect(response.body).to include 'Released: 2017'
     end
+
+    it 'sends to an error page if given dodgy title input' do
+
+    end
+
+    it 'sends to an error page if given dodgy release_year input' do
+      
+    end
+    it 'sends to an error page if given dodgy artist_id input' do
+      
+    end
+
+  end
+
+  context 'GET /albums/new' do
+    it 'returns 200 OK' do
+      response = get('/albums/new')
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns a html page where you can create an album' do
+      response = get('/albums/new')
+      expect(response.body).to include '<h1>New Album Input Form</h1>'
+      expect(response.body).to include '<form action="/albums" method="POST">'
+      expect(response.body).to include '<label for="album_title">Album Title:</label><br>'
+      expect(response.body).to include '<input type="text" id="album_title" name="title"><br>'
+      expect(response.body).to include '<label for="album_release_year">Album Release Year:</label><br>'
+      expect(response.body).to include '<input type="text" id="album_release_year" name="release_year"><br>'
+      expect(response.body).to include '<label for="album-artist_idr">Artist id:</label><br>'
+      expect(response.body).to include '<input type="text" id="album_artist_id" name="artist_id"><br><br>'
+      expect(response.body).to include '<input type="submit" value="Submit">'
+    end
+  end
+
+  context 'GET /artists/new' do
+    it 'returns 200 OK' do
+      response = get('/albums/new')
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns a html page where you can create an artist' do
+      response = get('/artists/new')
+      expect(response.body).to include '<h1>New Artist Input Form</h1>'
+      expect(response.body).to include '<form action="/artists" method="POST">'
+      expect(response.body).to include '<label for="artist_name">Artist Name:</label><br>'
+      expect(response.body).to include '<input type="text" id="artist_name" name="name"><br>'
+      expect(response.body).to include '<label for="artist_genre">Artist Genre:</label><br>'
+      expect(response.body).to include '<input type="text" id="artist_genre" name="genre"><br>'
+      expect(response.body).to include '<input type="submit" value="Submit">'
+    end
   end
 
   context 'POST /artists' do
     it 'returns 200 OK' do
       response = post('/artists?id=6&name=Wild Nothing&genre=indie')
-
       expect(response.status).to eq(200)
     end
 
@@ -106,6 +159,14 @@ describe Application do
       expect(response.body).to include 'Name: Wild Nothing'
       expect(response.body).to include 'Genre: indie'
       expect(response.body).to include '<a href="/artists/6">Go to this artists page</a>'
+    end
+
+    it 'sends to an error page if given dodgy name input' do
+
+    end
+
+    it 'sends to an error page if given dodgy genre input' do
+      
     end
   end
 end
